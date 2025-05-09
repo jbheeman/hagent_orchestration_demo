@@ -1,5 +1,5 @@
 import streamlit as st
-import replicate
+# import replicate
 import os
 
 # App title
@@ -8,15 +8,17 @@ st.set_page_config(page_title="🦙💬 Llama 2 Chatbot")
 # Replicate Credentials
 with st.sidebar:
     st.title('🦙💬 Llama 2 Chatbot')
-    if 'REPLICATE_API_TOKEN' in st.secrets:
-        st.success('API key already provided!', icon='✅')
-        replicate_api = st.secrets['REPLICATE_API_TOKEN']
-    else:
-        replicate_api = st.text_input('Enter Replicate API token:', type='password')
-        if not (replicate_api.startswith('r8_') and len(replicate_api)==40):
-            st.warning('Please enter your credentials!', icon='⚠️')
-        else:
-            st.success('Proceed to entering your prompt message!', icon='👉')
+    st.success('API key already provided!', icon='✅')
+    # if 'REPLICATE_API_TOKEN' in st.secrets:
+    #     st.success('API key already provided!', icon='✅')
+    #     replicate_api = st.secrets['REPLICATE_API_TOKEN']
+    # else:
+    #     st.success('Proceed to entering your prompt message!', icon='👉')
+        # replicate_api = st.text_input('Enter Replicate API token:', type='password')
+        # if not (replicate_api.startswith('r8_') and len(replicate_api)==40):
+        #     st.warning('Please enter your credentials!', icon='⚠️')
+        # else:
+        #     st.success('Proceed to entering your prompt message!', icon='👉')
 
     # Refactored from https://github.com/a16z-infra/llama2-chatbot
     st.subheader('Models and parameters')
@@ -33,7 +35,7 @@ with st.sidebar:
     max_length = st.sidebar.slider('max_length', min_value=64, max_value=4096, value=512, step=8)
     
     st.markdown('📖 Learn how to build this app in this [blog](https://blog.streamlit.io/how-to-build-a-llama-2-chatbot/)!')
-os.environ['REPLICATE_API_TOKEN'] = replicate_api
+# os.environ['REPLICATE_API_TOKEN'] = replicate_api
 
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
@@ -56,13 +58,13 @@ def generate_llama2_response(prompt_input):
             string_dialogue += "User: " + dict_message["content"] + "\n\n"
         else:
             string_dialogue += "Assistant: " + dict_message["content"] + "\n\n"
-    output = replicate.run(llm, 
-                           input={"prompt": f"{string_dialogue} {prompt_input} Assistant: ",
-                                  "temperature":temperature, "top_p":top_p, "max_length":max_length, "repetition_penalty":1})
-    return output
+    # output = replicate.run(llm, 
+    #                        input={"prompt": f"{string_dialogue} {prompt_input} Assistant: ",
+    #                               "temperature":temperature, "top_p":top_p, "max_length":max_length, "repetition_penalty":1})
+    return "Hello"
 
 # User-provided prompt
-if prompt := st.chat_input(disabled=not replicate_api):
+if prompt := st.chat_input(disabled=False):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
